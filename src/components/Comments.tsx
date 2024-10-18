@@ -29,7 +29,12 @@ export const Comments: FC<Props> = (props: Props) => {
       <Box sx={{ width: "100%" }}>
         {comments.map((comment, index) => (
           <div key={index}>
-            <UserComment commentPayload={comment}></UserComment>
+            <UserComment
+              commentPayload={comment}
+              refresh={() => {
+                setRefresh((prev) => !prev);
+              }}
+            ></UserComment>
           </div>
         ))}
       </Box>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { TextField, Button, Box, FormControl } from "@mui/material";
+import { TextField, Button, Box, FormControl, IconButton } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 
 interface FormData {
@@ -9,10 +10,12 @@ interface FormData {
 
 interface Props {
   refresh?: () => void;
+  replyToId?: number | null;
+  tagReplyTo?: string | null;
 }
 
 export const FormComment: React.FC<Props> = (props) => {
-  const initFormData = { email: "", body: "" };
+  const initFormData = { email: "", body: props?.tagReplyTo != null ? `@${props?.tagReplyTo}` : "" };
   const [formData, setFormData] = useState<FormData>(initFormData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +25,7 @@ export const FormComment: React.FC<Props> = (props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
-    axios.post("http://localhost:3001/comments", formData).then(() => {
+    axios.post("http://localhost:3001/comments", { ...formData, replyToId: props.replyToId }).then(() => {
       if (props.refresh) {
         props.refresh();
         setFormData(initFormData);
@@ -38,9 +41,18 @@ export const FormComment: React.FC<Props> = (props) => {
       </FormControl>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button size="small" type="submit" variant="contained" color="primary" sx={{ width: 100 }}>
-          Submit
-        </Button>
+        <IconButton
+          type="submit"
+          sx={{
+            backgroundColor: "primary.main",
+            borderRadius: "50%",
+            "&:hover": {
+              backgroundColor: "primary.dark",
+            },
+          }}
+        >
+          <SendIcon sx={{ color: "white" }} fontSize="small" />
+        </IconButton>
       </Box>
     </Box>
   );
