@@ -15,18 +15,24 @@ export const Comments: FC<Props> = (props: Props) => {
     axios.get("http://localhost:3001/comments").then((data) => setComments(data.data));
   }, [refresh]);
   return (
-    <Paper sx={{ width: 1200, display: "flex", backgroundColor: "white", flexDirection: "column", alignItems: "start", p: 4 }}>
-      <Typography variant="h3"> Leave comments</Typography>
+    <Paper
+      sx={{ width: { xs: 400, sm: 550, md: 800, lg: 900 }, maxHeight: { xs: 800 }, display: "flex", backgroundColor: "white", flexDirection: "column", alignItems: "start", p: 4, overflow: "auto" }}
+    >
+      <Typography variant="h1" fontSize={50} sx={{ mb: 2 }}>
+        Leave comments
+      </Typography>
       <FormComment
         refresh={() => {
           setRefresh((prev) => !prev);
         }}
       ></FormComment>
-      {comments.map((comment, index) => (
-        <div key={index}>
-          <UserComment commentPayload={comment}></UserComment>
-        </div>
-      ))}
+      <Box sx={{ width: "100%" }}>
+        {comments.map((comment, index) => (
+          <div key={index}>
+            <UserComment commentPayload={comment}></UserComment>
+          </div>
+        ))}
+      </Box>
     </Paper>
   );
 };

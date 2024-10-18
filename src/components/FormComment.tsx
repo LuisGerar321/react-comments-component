@@ -12,7 +12,8 @@ interface Props {
 }
 
 export const FormComment: React.FC<Props> = (props) => {
-  const [formData, setFormData] = useState<FormData>({ email: "", body: "" });
+  const initFormData = { email: "", body: "" };
+  const [formData, setFormData] = useState<FormData>(initFormData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,21 +25,23 @@ export const FormComment: React.FC<Props> = (props) => {
     axios.post("http://localhost:3001/comments", formData).then(() => {
       if (props.refresh) {
         props.refresh();
+        setFormData(initFormData);
       }
     });
   };
 
   return (
-    <Box component="form" sx={{ display: "flex", flexDirection: "column", position: "relative", width: "100%", height: 200 }} onSubmit={handleSubmit}>
-      <FormControl>
-        <TextField label="Email" name="email" value={formData.email} onChange={handleChange} sx={{ mb: 2 }} />
-
-        <TextField label="Add a comment" value={formData.body} onChange={handleChange} name="body" sx={{ mb: 2, height: 200 }} />
+    <Box component="form" sx={{ display: "flex", flexDirection: "column", width: "100%" }} onSubmit={handleSubmit}>
+      <FormControl size="small" fullWidth={false}>
+        <TextField label="Email" name="email" value={formData.email} onChange={handleChange} sx={{ mb: 2 }} required type="email" />
+        <TextField label="Add a comment" name="body" value={formData.body} onChange={handleChange} multiline sx={{ mb: 2 }} required type="text" />
       </FormControl>
 
-      <Button type="submit" variant="contained" color="primary" sx={{ width: 100, height: 40, position: "absolute", right: 10, bottom: 0 }}>
-        Submit
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button size="small" type="submit" variant="contained" color="primary" sx={{ width: 100 }}>
+          Submit
+        </Button>
+      </Box>
     </Box>
   );
 };
