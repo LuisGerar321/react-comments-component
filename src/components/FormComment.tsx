@@ -12,6 +12,7 @@ interface Props {
   refresh?: () => void;
   replyToId?: number | null;
   tagReplyTo?: string | null;
+  onSubmit?: () => void;
 }
 
 export const FormComment: React.FC<Props> = (props) => {
@@ -26,10 +27,11 @@ export const FormComment: React.FC<Props> = (props) => {
     e.preventDefault();
     console.log(formData);
     axios.post("http://localhost:3001/comments", { ...formData, replyToId: props.replyToId }).then(() => {
-      if (props.refresh) {
-        props.refresh();
-        setFormData(initFormData);
-      }
+      if (props.refresh) props.refresh();
+
+      if (props.onSubmit) props.onSubmit();
+
+      setFormData(initFormData);
     });
   };
 

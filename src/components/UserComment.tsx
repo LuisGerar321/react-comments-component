@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardContent, CardHeader, CardActions, IconButton, Typography, Collapse, Button } from "@mui/material";
+import { Avatar, Box, Card, CardContent, CardHeader, CardActions, IconButton, Typography, Collapse, Button, Chip } from "@mui/material";
 import { red } from "@mui/material/colors";
 import React, { FC, useState } from "react";
 import moment from "moment";
@@ -16,7 +16,11 @@ export const UserComment: FC<{ commentPayload: IComment; refresh?: () => void }>
   const [openReplies, setOpenReplies] = useState(false);
   const { replies } = commentPayload;
   const isAReplyComment = commentPayload.parentCommentId !== null;
-  console.log(refresh);
+
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+  const emailMatch = commentPayload.body.match(emailPattern);
+  const email = emailMatch ? emailMatch[0] : "";
+  const remainingText = email ? commentPayload.body.replace(email, "").trim() : commentPayload.body;
 
   return (
     <Box>
@@ -44,9 +48,9 @@ export const UserComment: FC<{ commentPayload: IComment; refresh?: () => void }>
         />
 
         <CardContent>
+          {email && <Chip label={email} color="primary" sx={{ mb: 1 }} />}
           <Typography sx={{ mr: 10 }} variant="body1">
-            {commentPayload.body}
-            {commentPayload.parentCommentId}
+            {remainingText}
           </Typography>
         </CardContent>
 
@@ -92,7 +96,14 @@ export const UserComment: FC<{ commentPayload: IComment; refresh?: () => void }>
 
       <Collapse in={openReply} timeout="auto" unmountOnExit>
         <Box sx={{ pl: 10 }}>
-          <FormComment replyToId={commentPayload.id} refresh={refresh} tagReplyTo={isAReplyComment ? commentPayload.email : null} />
+          <FormComment
+            onSubmit={() => {
+              setOpenReply(false);
+            }}
+            replyToId={commentPayload.id}
+            refresh={refresh}
+            tagReplyTo={isAReplyComment ? commentPayload.email : null}
+          />
         </Box>
       </Collapse>
     </Box>
