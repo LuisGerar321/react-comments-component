@@ -38,7 +38,6 @@ export const UserComment: FC<{ commentPayload: IComment; refresh?: () => void }>
       await axios.patch(`http://localhost:3001/comments/${commentPayload.id}`, { body: editedComment });
       setIsEditing(false);
       if (refresh) refresh();
-      showSnackbar("Comment edited successfully!");
     } catch (error) {
       console.error("Error al guardar el comentario:", error);
     } finally {
@@ -47,15 +46,12 @@ export const UserComment: FC<{ commentPayload: IComment; refresh?: () => void }>
   };
 
   const handleDeleteComment = async () => {
-    setIsDeleting(true);
     try {
       await axios.delete(`http://localhost:3001/comments/${commentPayload.id}`);
       if (refresh) refresh();
-      showSnackbar("Comment deleted successfully!");
     } catch (error) {
       console.error("Error al eliminar el comentario:", error);
     } finally {
-      setIsDeleting(false);
     }
   };
 
