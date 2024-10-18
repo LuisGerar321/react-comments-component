@@ -28,7 +28,7 @@ export const Comments: FC<Props> = (props: Props) => {
       ></FormComment>
       <Box sx={{ width: "100%" }}>
         {comments.map((comment, index) => (
-          <div key={index}>
+          <div key={comment.id}>
             <UserComment
               commentPayload={comment}
               refresh={() => {
