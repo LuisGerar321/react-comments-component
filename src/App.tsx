@@ -1,23 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Greating } from "./components/Greating";
-import { Typography } from "@mui/material";
-import Form from "./components/Form";
+import { Box } from "@mui/material";
+import { Comments } from "./components/Comments";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Greating message="Luis">
-              <Typography>Jueves</Typography>
-              <Form></Form>
-            </Greating>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <Box sx={{ backgroundColor: "whitesmoke", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Comments></Comments>} />
+        </Routes>
+      </BrowserRouter>
+    </Box>
   );
 }
 
